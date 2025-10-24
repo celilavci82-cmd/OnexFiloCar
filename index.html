@@ -1,12 +1,372 @@
 <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>onexFilocar</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>onexFilocar — Lüks Araç Kiralama</title>
+<style>
+  /* ===== Siyah & Gold Tema ===== */
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+  :root{
+    --bg:#050505;
+    --card:#0F0F0F;
+    --gold:#D4AF37;
+    --muted:#BDBDBD;
+    --glass: rgba(255,255,255,0.04);
+    --radius:12px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background: radial-gradient(800px 400px at 10% 6%, rgba(212,175,55,0.03), transparent), linear-gradient(180deg,var(--bg), #070707);
+    color:#F5F5F5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ===== Header ===== */
+  header{
+    position:sticky; top:0; z-index:120;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 22px; gap:12px;
+    background: linear-gradient(90deg, rgba(10,10,10,0.95), rgba(10,10,10,0.85));
+    border-bottom:1px solid rgba(212,175,55,0.06);
+    backdrop-filter: blur(4px);
+  }
+  .logo{font-weight:800;color:var(--gold);font-size:1.2rem;letter-spacing:1px}
+  nav{display:flex;gap:18px;align-items:center}
+  nav a{color:var(--muted);text-decoration:none;font-weight:500;font-size:0.95rem;padding:6px 8px;border-radius:8px}
+  nav a:hover{color:var(--gold);background:rgba(212,175,55,0.03)}
+  .cta{
+    background:transparent;color:var(--gold);padding:8px 14px;border-radius:999px;
+    cursor:pointer;font-weight:700;border:2px solid var(--gold);
+  }
+  .cta:hover{background:var(--gold);color:#000;transform:translateY(-2px);transition:.12s;}
+
+  /* ===== Main Layout ===== */
+  main{max-width:1200px;margin:20px auto;padding:0 16px 60px 16px}
+  .hero{
+    margin:10px 0 20px 0;padding:20px;border-radius:14px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    background: linear-gradient(90deg, rgba(212,175,55,0.04), rgba(212,175,55,0.01));
+    border:1px solid rgba(212,175,55,0.03)
+  }
+  .hero h1{margin:0;color:var(--gold);font-size:1.25rem}
+  .hero p{margin:0;color:var(--muted);font-size:0.95rem}
+
+  .sectionTitle{color:var(--gold);margin:18px 0 8px 0;font-size:1.05rem}
+
+  /* ===== Grid & Cards ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+  .card{
+    background:var(--card);border-radius:var(--radius);padding:12px;display:flex;flex-direction:column;gap:8px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.6);border:1px solid rgba(212,175,55,0.04);
+    transition: transform .18s, box-shadow .18s;
+  }
+  .card:hover{transform:translateY(-8px);box-shadow:0 30px 80px rgba(0,0,0,0.6)}
+  .thumb{width:100%;height:150px;border-radius:10px;object-fit:cover;background:linear-gradient(90deg,#111,#222)}
+  .name{color:var(--gold);font-weight:700;text-align:center;margin-top:6px}
+  .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;color:var(--muted);font-size:0.85rem}
+  .meta .badge{background:var(--glass);padding:6px 8px;border-radius:8px;color:var(--muted);font-weight:600}
+  .priceRow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px}
+  .price{font-weight:800;color:#fff}
+  .dateArea{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+  .dateArea input{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
+  .total{font-weight:800;color:var(--gold)}
+  .actions{display:flex;gap:8px;margin-top:8px}
+  .callBtn{
+    flex:1;background:var(--gold);color:#000;border:none;padding:10px;border-radius:8px;font-weight:800;cursor:pointer;
+  }
+  .callBtn:hover{background:#fff}
+
+  /* ===== Sections simple content ===== */
+  .muted{color:var(--muted)}
+  .center{text-align:center}
+
+  /* ===== Footer ===== */
+  footer{padding:18px 16px;color:var(--muted);text-align:center;border-top:1px solid rgba(255,255,255,0.03);margin-top:28px}
+
+  /* ===== WhatsApp Float ===== */
+  .whatsappFloat{position:fixed;right:18px;bottom:18px;width:58px;height:58px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 40px rgba(212,175,55,0.15);cursor:pointer;z-index:200}
+  .waTxt{font-weight:800;color:#000;font-family:monospace}
+
+  /* ===== Small screens ===== */
+  @media(max-width:840px){
+    .hero{flex-direction:column;align-items:flex-start}
+    nav{display:none}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+  }
+
+  /* ===== Subtle animations (CSS only) ===== */
+  .fadeIn{opacity:0;transform:translateY(8px);animation:fadeIn .45s forwards}
+  @keyframes fadeIn{to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">OnexFiloCar</div>
+
+  <!-- Menü: hepsi görünür ama sayfa içi yönlendirme -->
+  <nav aria-label="Ana menü">
+    <a href="#home">Ana Sayfa</a>
+    <a href="#cars">Araçlar</a>
+    <a href="#kampanyalar">Kampanyalar</a>
+    <a href="#blog">Blog</a>
+    <a href="#kvkk">KVKK</a>
+    <a href="#iletisim">İletişim</a>
+  </nav>
+
+  <!-- Hemen Ara: metin butonu (numara görünmez) -->
+  <button class="cta" id="callNowHeader">Hemen Ara</button>
+</header>
+
+<main id="home" class="fadeIn">
+  <section class="hero">
+    <div>
+      <h1>OnexFiloCar</h1>
+      <p class="muted">Güvenilir, Hızlı ve Şeffaf.</p>
+    </div>
+    <div class="center">
+      <div class="muted" style="font-weight:700;color:var(--gold)">"Kaliteli Hizmet Bilinçli Tercihler İle Şekillenir"</div>
+    </div>
+  </section>
+
+  <!-- ARAÇLAR -->
+  <section id="cars">
+    <h2 class="sectionTitle">Tüm Araçlar</h2>
+    <div class="grid" id="carsGrid"></div>
+  </section>
+
+  <!-- Kampanyalar (sade bilgi olarak kalacak) -->
+  <section id="kampanyalar" style="margin-top:26px">
+    <h2 class="sectionTitle">Kampanyalar</h2>
+    <p class="muted center">Seçili Araçlarda %10 Günlük-%30 Aylık İndirim Devam Ediyor.</p>
+  </section>
+
+  <!-- Blog (placeholder kısa) -->
+  <section id="blog" style="margin-top:26px">
+    <h2 class="sectionTitle">Blog</h2>
+    <p class="muted center">
+Kolay Rezervasyon ve Hızlı Teslimat
+Modern dijital altyapımız sayesinde, araç kiralama işlemlerinizi dakikalar içinde online olarak tamamlayabilirsiniz. Havalimanı, otel veya belirlenen adrese hızlı teslimat hizmetimizle zamandan tasarruf edin..</p>
+  </section>
+
+  <!-- KVKK -->
+  <section id="kvkk" style="margin-top:26px">
+    <h2 class="sectionTitle">KVKK</h2>
+    <p class="muted center">Kişisel verileriniz 6698 sayılı KVKK kapsamında korunur. Detaylı aydınlatma metni gerektiğinde sağlanacaktır.</p>
+  </section>
+
+  <!-- İletişim -->
+  <section id="iletisim" style="margin-top:26px">
+    <h2 class="sectionTitle">İletişim</h2>
+    <p class="muted center">
+      Telefon: <a href="tel:+905548211699" style="color:var(--gold);text-decoration:none">+90 554 821 16 99</a><br/>
+      E-posta: <a href="mailto:info@onexcarfilo.com" style="color:var(--gold);text-decoration:none">info@onexcarfilo.com</a><br/>
+      Adres: Türkiye
+    </p>
+  </section>
+</main>
+
+<footer>© 2025 onexFilocar — Tüm hakları saklıdır.</footer>
+
+<!-- WhatsApp floating -->
+<div class="whatsappFloat" id="whatsappBtn" title="WhatsApp ile iletişime geç">
+  <div class="waTxt">WA</div>
+</div>
+
+<script>
+/* ============================
+   Tam sürüm: Tek dosya HTML
+   - 55 araç verisi
+   - Görseller: images/{slug}.jpg
+   - Kartlarda sadece "Hemen Ara" (tel link)
+   - Menü sayfa içi anchor
+   ============================ */
+
+/* ---------- Araç verisi (55 adet) ---------- */
+const cars = [
+  {id:1,slug:'audi-a4',name:'Audi A4',price:1500,fuel:'Benzin',gear:'Otomatik'},
+  {id:2,slug:'audi-a6',name:'Audi A6',price:2200,fuel:'Benzin',gear:'Otomatik'},
+  {id:3,slug:'bmw-320i',name:'BMW 320i',price:1800,fuel:'Benzin',gear:'Otomatik'},
+  {id:4,slug:'bmw-520i',name:'BMW 520i',price:2200,fuel:'Benzin',gear:'Otomatik'},
+  {id:5,slug:'bmw-x1',name:'BMW X1',price:1500,fuel:'Benzin',gear:'Manuel'},
+  {id:6,slug:'citroen-berlingo',name:'Citroen Berlingo',price:1750,fuel:'Dizel',gear:'Manuel'},
+  {id:7,slug:'citroen-c3',name:'Citroen C3',price:1200,fuel:'Benzin',gear:'Manuel'},
+  {id:8,slug:'citroen-spacetourer',name:'Citroen Spacetourer',price:1800,fuel:'Dizel',gear:'Manuel'},
+  {id:9,slug:'dacia-duster',name:'Dacia Duster',price:1500,fuel:'Benzin',gear:'Manuel'},
+  {id:10,slug:'fiat-doblo',name:'Fiat Doblo',price:1500,fuel:'Dizel',gear:'Manuel'},
+  {id:11,slug:'fiat-egea',name:'Fiat Egea',price:950,fuel:'Benzin',gear:'Manuel'},
+  {id:12,slug:'fiat-scudo',name:'Fiat Scudo',price:1000,fuel:'Dizel',gear:'Manuel'},
+  {id:13,slug:'ford-fiesta',name:'Ford Fiesta',price:950,fuel:'Benzin',gear:'Manuel'},
+  {id:14,slug:'ford-tourneo-courier',name:'Ford Tourneo Courier',price:1400,fuel:'Dizel',gear:'Manuel'},
+  {id:15,slug:'ford-tourneo-custom',name:'Ford Tourneo Custom',price:1750,fuel:'Dizel',gear:'Manuel'},
+  {id:16,slug:'ford-tourneo-custom-2',name:'Ford Tourneo Custom (L)',price:2200,fuel:'Dizel',gear:'Otomatik'},
+  {id:17,slug:'hyundai-i20',name:'Hyundai i20',price:950,fuel:'Benzin',gear:'Manuel'},
+  {id:18,slug:'hyundai-staria',name:'Hyundai Staria',price:1000,fuel:'Dizel',gear:'Otomatik'},
+  {id:19,slug:'htundai-tucson',name:'Hyundai Tucson',price:2500,fuel:'Benzin',gear:'Otomatik'},
+  {id:20,slug:'jaguar-xf',name:'Jaguar XF',price:3000,fuel:'Benzin',gear:'Otomatik'},
+  {id:21,slug:'kia.sportage',name:'Kia Sportage',price:2500,fuel:'Benzin',gear:'Otomatik'},
+  {id:22,slug:'kia-rio',name:'Kia Rio',price:1500,fuel:'Benzin',gear:'Manuel'},
+  {id:23,slug:'mercedes-e200',name:'Mercedes E200',price:2200,fuel:'Benzin',gear:'Otomatik'},
+  {id:24,slug:'mercedes-c200',name:'Mercedes C200',price:2200,fuel:'Benzin',gear:'Otomatik'},
+  {id:25,slug:'mercedes-gla',name:'Mercedes GLA',price:3000,fuel:'Benzin',gear:'Otomatik'},
+  {id:26,slug:'mercedes-sprinter',name:'Mercedes Sprinter',price:4500,fuel:'Dizel',gear:'Manuel'},
+  {id:27,slug:'mercedes-vclass',name:'Mercedes V-Class',price:3500,fuel:'Dizel',gear:'Otomatik'},
+  {id:28,slug:'mercedes-vito',name:'Mercedes Vito',price:5000,fuel:'Dizel',gear:'Manuel'},
+  {id:29,slug:'nissan-qashqai',name:'Nissan Qashqai',price:2500,fuel:'Benzin',gear:'Otomatik'},
+  {id:30,slug:'opel-corsa',name:'Opel Corsa',price:1600,fuel:'Benzin',gear:'Manuel'},
+  {id:31,slug:'peugeot-3008',name:'Peugeot 3008',price:2200,fuel:'Benzin',gear:'Otomatik'},
+  {id:32,slug:'peugeot-rifter',name:'Peugeot Rifter',price:1800,fuel:'Dizel',gear:'Manuel'},
+  {id:33,slug:'peugeot-traveller',name:'Peugeot Traveller',price:2500,fuel:'Dizel',gear:'Otomatik'},
+  {id:34,slug:'renault-captur',name:'Renault Captur',price:2200,fuel:'Benzin',gear:'Otomatik'},
+  {id:35,slug:'renault-clio',name:'Renault Clio',price:900,fuel:'Benzin',gear:'Manuel'},
+  {id:36,slug:'renault-kangoo',name:'Renault Kangoo',price:1500,fuel:'Dizel',gear:'Manuel'},
+  {id:37,slug:'renault-master',name:'Renault Master',price:4500,fuel:'Dizel',gear:'Manuel'},
+  {id:38,slug:'renault-trafic',name:'Renault Trafic',price:2500,fuel:'Dizel',gear:'Manuel'},
+  {id:39,slug:'seat-ibiza',name:'Seat Ibiza',price:950,fuel:'Benzin',gear:'Manuel'},
+  {id:40,slug:'skoda-superb',name:'Skoda Superb',price:2000,fuel:'Benzin',gear:'Otomatik'},
+  {id:41,slug:'toyota-alphard',name:'Toyota Alphard',price:1500,fuel:'Benzin',gear:'Otomatik'},
+  {id:42,slug:'toyota-proace',name:'Toyota Proace',price:1500,fuel:'Dizel',gear:'Manuel'},
+  {id:43,slug:'toyota-rav4',name:'Toyota RAV4',price:2500,fuel:'Benzin',gear:'Otomatik'},
+  {id:44,slug:'toyota-yaris',name:'Toyota Yaris',price:950,fuel:'Benzin',gear:'Manuel'},
+  {id:45,slug:'volkswagen-caddy',name:'Volkswagen Caddy',price:1500,fuel:'Dizel',gear:'Manuel'},
+  {id:46,slug:'volkswagen-passat',name:'Volkswagen Passat',price:2100,fuel:'Dizel',gear:'Otomatik'},
+  {id:47,slug:'volvo-s60',name:'Volvo S60',price:1700,fuel:'Benzin',gear:'Otomatik'},
+  {id:48,slug:'volkswagen-golf',name:'Volkswagen Golf',price:1500,fuel:'Benzin',gear:'Manuel'},
+  {id:49,slug:'seat-leon',name:'Seat Leon',price:1500,fuel:'Benzin',gear:'Manuel'},
+  {id:50,slug:'ford-focus',name:'Ford Focus',price:1200,fuel:'Benzin',gear:'Manuel'},
+  {id:51,slug:'renault-megane',name:'Renault Megane',price:1100,fuel:'Benzin',gear:'Manuel'}
+];
+
+/* ---------- Yardımcı fonksiyonlar ---------- */
+function daysBetween(start, end) {
+  const s = new Date(start), e = new Date(end);
+  if(isNaN(s) || isNaN(e)) return 0;
+  const diff = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
+  return diff > 0 ? diff : 0;
+}
+function formatTR(dateStr){
+  if(!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('tr-TR', {day:'2-digit',month:'2-digit',year:'numeric'});
+}
+
+/* ---------- Kart oluşturma (DETAY YOK; sadece Hemen Ara) ---------- */
+function createCard(car){
+  const c = document.createElement('div'); c.className='card fadeIn';
+
+  // image
+  const img = document.createElement('img'); img.className='thumb';
+  img.src = 'images/' + car.slug + '.jpg';
+  img.alt = car.name;
+  img.onerror = function(){ this.src=''; this.style.background='linear-gradient(90deg,#111,#222)'; };
+
+  // name/meta/price
+  const name = document.createElement('div'); name.className='name'; name.textContent = car.name;
+  const meta = document.createElement('div'); meta.className='meta';
+  const b1 = document.createElement('div'); b1.className='badge'; b1.textContent = car.fuel;
+  const b2 = document.createElement('div'); b2.className='badge'; b2.textContent = car.gear;
+  meta.appendChild(b1); meta.appendChild(b2);
+
+  const priceRow = document.createElement('div'); priceRow.className='priceRow';
+  const price = document.createElement('div'); price.className='price'; price.textContent = car.price + ' ₺ / gün';
+  priceRow.appendChild(price);
+
+  // date inputs + total
+  const dateArea = document.createElement('div'); dateArea.className='dateArea';
+  const start = document.createElement('input'); start.type='date'; start.className='start';
+  const end = document.createElement('input'); end.type='date'; end.className='end';
+  const total = document.createElement('div'); total.className='total'; total.style.minWidth='120px';
+
+  dateArea.appendChild(start); dateArea.appendChild(end); dateArea.appendChild(total);
+
+  // actions: Hemen Ara (tel)
+  const actions = document.createElement('div'); actions.className='actions';
+  const callBtn = document.createElement('button'); callBtn.className='callBtn'; callBtn.textContent='Hemen Ara';
+
+  // hesaplama
+  function recalc(){
+    const s = start.value, e = end.value;
+    const d = daysBetween(s,e);
+    if(d <= 0){ total.textContent = ''; return; }
+    const tot = d * car.price;
+    total.textContent = tot.toLocaleString('tr-TR') + ' ₺';
+  }
+  start.addEventListener('change', recalc);
+  end.addEventListener('change', recalc);
+
+  // Hemen Ara davranışı: telefon araması (mobil) / tel link
+  callBtn.addEventListener('click', function(){
+    // Eğer tarih seçilmişse kısa bir onay göster (alert), sonra aramayı başlatır
+    const s = start.value, e = end.value;
+    const days = daysBetween(s,e);
+    const tot = days>0 ? (days * car.price) : null;
+    if(tot){
+      // kısa bir onay penceresi yerine doğrudan arama aç; alert yerine confirm tercih ettim:
+      const confirmMsg = `${car.name}\n${formatTR(s)} ${e? ' - ' + formatTR(e) : ''}\nToplam: ${tot.toLocaleString('tr-TR')} ₺\n\nAramak istiyor musunuz?`;
+      if(!confirm(confirmMsg)) return;
+    }
+    window.location.href = 'tel:+905548211699';
+  });
+
+  actions.appendChild(callBtn);
+
+  // assemble
+  c.appendChild(img);
+  c.appendChild(name);
+  c.appendChild(meta);
+  c.appendChild(priceRow);
+  c.appendChild(dateArea);
+  c.appendChild(actions);
+
+  return c;
+}
+
+/* ---------- Render tüm araçlar ---------- */
+function renderCars(){
+  const grid = document.getElementById('carsGrid');
+  grid.innerHTML = '';
+  cars.forEach(car => grid.appendChild(createCard(car)));
+}
+renderCars();
+
+/* ---------- Header Hemen Ara butonu ---------- */
+document.getElementById('callNowHeader').addEventListener('click', function(){
+  window.location.href = 'tel:+905548211699';
+});
+
+/* ---------- WhatsApp float ---------- */
+document.getElementById('whatsappBtn').addEventListener('click', function(){
+  const phone = '905548211699';
+  const text = encodeURIComponent('Merhaba, araç kiralama hakkında bilgi almak istiyorum.');
+  window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+});
+
+/* ---------- Smooth scrolling for anchors ---------- */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click', function(e){
+    const target = document.querySelector(this.getAttribute('href'));
+    if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth',block:'start'}); }
+  });
+});
+
+/* ---------- Small UX: keyboard focus for date inputs (enter to recalc) ---------- */
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){sss
+    // recalc all totals
+    document.querySelectorAll('.card').forEach(card=>{
+      const start = card.querySelector('.start'), end = card.querySelector('.end');
+      if(start && end){
+        const ev = new Event('change'); start.dispatchEvent(ev); end.dispatchEvent(ev);
+      }
+    });
+  }
+});
+
+/* ---------- End of script ---------- */
+console.log('onexFilocar: tek dosya sürümü yüklendi. Görselleri images klasörüne koyun: images/{slug}.jpg');
+</script>
+</body>
 </html>
