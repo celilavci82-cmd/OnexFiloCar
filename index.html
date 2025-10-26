@@ -6,7 +6,7 @@
 </script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag(){dataLayer.push(arguments);} 
   gtag('js', new Date());
 
   gtag('config', 'AW-17670893803');
@@ -15,14 +15,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>onexFilocar — Lüks Araç Kiralama</title>
 <style>
-  /* ===== Siyah & Gold Tema ===== */
+  /* ===== Beyaz & Gold Tema (siyah->beyaz, beyaz yazılar->siyah) ===== */
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
   :root{
-    --bg:#050505;
-    --card:#0F0F0F;
+    --bg:#FFFFFF; /* eskiden #050505 */
+    --card:#FFFFFF; /* eskiden #0F0F0F */
     --gold:#D4AF37;
-    --muted:#BDBDBD;
-    --glass: rgba(255,255,255,0.04);
+    --muted:#6B6B6B; /* daha koyu gri (beyaz zeminde okunur) */
+    --glass: rgba(0,0,0,0.04); /* tersine çevrildi */
     --radius:12px;
   }
   *{box-sizing:border-box}
@@ -30,8 +30,8 @@
   body{
     margin:0;
     font-family:'Poppins',sans-serif;
-    background: radial-gradient(800px 400px at 10% 6%, rgba(212,175,55,0.03), transparent), linear-gradient(180deg,var(--bg), #070707);
-    color:#F5F5F5;
+    background: radial-gradient(800px 400px at 10% 6%, rgba(212,175,55,0.03), transparent), linear-gradient(180deg,var(--bg), #FBFBFB);
+    color:#000; /* beyaz yazılar artık siyah */
     -webkit-font-smoothing:antialiased;
   }
 
@@ -40,7 +40,7 @@
     position:sticky; top:0; z-index:120;
     display:flex; align-items:center; justify-content:space-between;
     padding:14px 22px; gap:12px;
-    background: linear-gradient(90deg, rgba(10,10,10,0.95), rgba(10,10,10,0.85));
+    background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
     border-bottom:1px solid rgba(212,175,55,0.06);
     backdrop-filter: blur(4px);
   }
@@ -71,31 +71,31 @@
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
   .card{
     background:var(--card);border-radius:var(--radius);padding:12px;display:flex;flex-direction:column;gap:8px;
-    box-shadow:0 12px 30px rgba(0,0,0,0.6);border:1px solid rgba(212,175,55,0.04);
+    box-shadow:0 12px 30px rgba(0,0,0,0.06);border:1px solid rgba(212,175,55,0.04);
     transition: transform .18s, box-shadow .18s;
   }
-  .card:hover{transform:translateY(-8px);box-shadow:0 30px 80px rgba(0,0,0,0.6)}
-  .thumb{width:100%;height:150px;border-radius:10px;object-fit:cover;background:linear-gradient(90deg,#111,#222)}
+  .card:hover{transform:translateY(-8px);box-shadow:0 30px 80px rgba(0,0,0,0.08)}
+  .thumb{width:100%;height:150px;border-radius:10px;object-fit:cover;background:linear-gradient(90deg,#f5f5f5,#eaeaea)}
   .name{color:var(--gold);font-weight:700;text-align:center;margin-top:6px}
   .meta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;color:var(--muted);font-size:0.85rem}
   .meta .badge{background:var(--glass);padding:6px 8px;border-radius:8px;color:var(--muted);font-weight:600}
   .priceRow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px}
-  .price{font-weight:800;color:#fff}
+  .price{font-weight:800;color:#000} /* eskiden #fff */
   .dateArea{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
-  .dateArea input{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
+  .dateArea input{padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:transparent;color:inherit}
   .total{font-weight:800;color:var(--gold)}
   .actions{display:flex;gap:8px;margin-top:8px}
   .callBtn{
     flex:1;background:var(--gold);color:#000;border:none;padding:10px;border-radius:8px;font-weight:800;cursor:pointer;
   }
-  .callBtn:hover{background:#fff}
+  .callBtn:hover{background:rgba(0,0,0,0.06);color:inherit}
 
   /* ===== Sections simple content ===== */
   .muted{color:var(--muted)}
   .center{text-align:center}
 
   /* ===== Footer ===== */
-  footer{padding:18px 16px;color:var(--muted);text-align:center;border-top:1px solid rgba(255,255,255,0.03);margin-top:28px}
+  footer{padding:18px 16px;color:var(--muted);text-align:center;border-top:1px solid rgba(0,0,0,0.06);margin-top:28px}
 
   /* ===== WhatsApp Float ===== */
   .whatsappFloat{position:fixed;right:18px;bottom:18px;width:58px;height:58px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 40px rgba(212,175,55,0.15);cursor:pointer;z-index:200}
@@ -274,7 +274,7 @@ function createCard(car){
   const img = document.createElement('img'); img.className='thumb';
   img.src = 'images/' + car.slug + '.jpg';
   img.alt = car.name;
-  img.onerror = function(){ this.src=''; this.style.background='linear-gradient(90deg,#111,#222)'; };
+  img.onerror = function(){ this.src=''; this.style.background='linear-gradient(90deg,#f5f5f5,#eaeaea)'; };
 
   // name/meta/price
   const name = document.createElement('div'); name.className='name'; name.textContent = car.name;
